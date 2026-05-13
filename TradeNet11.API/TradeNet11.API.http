@@ -1,0 +1,6 @@
+@TradeNet11.API_HostAddress = http://localhost:5212
+
+GET {{TradeNet11.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
