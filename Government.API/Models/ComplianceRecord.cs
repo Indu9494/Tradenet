@@ -1,4 +1,4 @@
-namespace Goverment.Models
+namespace Government.API.Models
 {
     public class ComplianceRecord
     {
@@ -10,3 +10,4 @@ namespace Goverment.Models
         public string Notes { get; set; } = string.Empty;
     }
 }
+

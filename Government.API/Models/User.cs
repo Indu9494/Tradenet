@@ -17,3 +17,4 @@ namespace Government.API.Models
         public string? BusinessName { get; set; }
     }
 }
+

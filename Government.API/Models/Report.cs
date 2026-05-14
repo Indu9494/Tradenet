@@ -1,4 +1,4 @@
-namespace Goverment.Models
+namespace Government.API.Models
 {
     public class Report
     {
@@ -8,3 +8,4 @@ namespace Goverment.Models
         public DateTime GeneratedDate { get; set; }
     }
 }
+

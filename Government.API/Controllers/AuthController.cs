@@ -1,11 +1,9 @@
-using Goverment.Models;
-using Goverment.Services;
 using Government.API.Data;
 using Government.API.Exceptions;
+using Government.API.Models;
 using Government.API.Models.ViewModels;
 using Government.API.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,35 +55,35 @@ namespace Government.API.Controllers
                 }
 
                 // Verify password
-                if (!PasswordHasher.VerifyPassword(request.Password, user.PasswordHash, user.PasswordSalt))
+                if (PasswordHasher.VerifyPassword(request.Password, user.PasswordHash, user.PasswordSalt))
                 {
-                    _logger.LogWarning($"Failed login attempt for user: {request.Email}");
-                    throw new InvalidCredentialsException();
+                    // Update last login date
+                    user.LastLoginDate = DateTime.Now;
+                    await _context.SaveChangesAsync();
+
+                    // Generate JWT token
+                    var token = _jwtTokenService.GenerateToken(user);
+
+                    _logger.LogInformation($"User logged in successfully: {request.Email}");
+
+                    return Ok(new AuthTokenResponse
+                    {
+                        Success = true,
+                        Message = "Login successful.",
+                        Token = token,
+                        User = new UserInfoDto
+                        {
+                            UserId = user.UserID,
+                            Name = user.Name,
+                            Email = user.Email,
+                            Role = user.Role,
+                            BusinessName = user.BusinessName ?? ""
+                        }
+                    });
                 }
 
-                // Update last login date
-                user.LastLoginDate = DateTime.Now;
-                await _context.SaveChangesAsync();
-
-                // Generate JWT token
-                var token = _jwtTokenService.GenerateToken(user);
-
-                _logger.LogInformation($"User logged in successfully: {request.Email}");
-
-                return Ok(new AuthTokenResponse
-                {
-                    Success = true,
-                    Message = "Login successful.",
-                    Token = token,
-                    User = new UserInfoDto
-                    {
-                        UserId = user.UserID,
-                        Name = user.Name,
-                        Email = user.Email,
-                        Role = user.Role,
-                        BusinessName = user.BusinessName ?? ""
-                    }
-                });
+                _logger.LogWarning($"Failed login attempt for user: {request.Email}");
+                throw new InvalidCredentialsException();
             }
             catch (InvalidCredentialsException)
             {
@@ -264,3 +262,4 @@ namespace Government.API.Controllers
         }
     }
 }
+

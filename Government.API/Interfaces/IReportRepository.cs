@@ -1,6 +1,6 @@
-using Goverment.Models;
+using Government.API.Models;
 
-namespace Goverment.Interfaces
+namespace Government.API.Interfaces
 {
     public interface IReportRepository
     {
@@ -13,3 +13,4 @@ namespace Goverment.Interfaces
         Task<bool> DeleteReportAsync(int reportId);
     }
 }
+

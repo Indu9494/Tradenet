@@ -1,9 +1,9 @@
 
 using Government.API.Data;
+using Government.API.Interfaces;
 using Government.API.Middleware;
+using Government.API.Repositories;
 using Government.API.Services;
-using Goverment.Interfaces;
-using Goverment.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,22 +20,22 @@ namespace Government.API
 
             // Configure Serilog with Bootstrap Logger
             Log.Logger = new LoggerConfiguration()
-                
+
                 .WriteTo.Console()
                 .WriteTo.File(
                     "logs/government.txt",
                     rollingInterval: RollingInterval.Day)
                 .CreateBootstrapLogger();
 
-  
+
 
             try
             {
                 // Configure DbContext from appsettings (use local API data context)
-                // Configure DbContext and point migrations to the Goverment project where migrations were created
+                // Configure DbContext and point migrations to the Government.API assembly
                 builder.Services.AddDbContext<AppDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("ProductDbConnection"), sql =>
-                        sql.MigrationsAssembly("Goverment")));
+                        sql.MigrationsAssembly("Government.API")));
 
                 // Configure JWT Authentication
                 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

@@ -1,4 +1,6 @@
-namespace Goverment.Models
+using Government.API.Models;
+
+namespace Government.API.Models
 {
     public class Notification
     {
@@ -13,3 +15,4 @@ namespace Goverment.Models
         public User? User { get; set; }
     }
 }
+

@@ -1,0 +1,176 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Business Officer Dashboard";
+    
+    var totalBusinesses = (int?)ViewBag.TotalBusinesses ?? 0;
+    var totalLicenses = (int?)ViewBag.TotalLicenses ?? 0;
+    var activeLicenses = (int?)ViewBag.ActiveLicenses ?? 0;
+    var pendingSubsidies = (int?)ViewBag.PendingSubsidies ?? 0;
+    var approvedSubsidies = (int?)ViewBag.ApprovedSubsidies ?? 0;
+    var totalTransactions = (decimal?)ViewBag.TotalTransactions ?? 0;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-light" style="overflow-x: hidden;">
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <nav class="col-md-2 d-md-block sidebar p-3 position-fixed" style="height: 100vh; left: 0; top: 0; z-index: 100;">
+                <div class="text-center mb-4 pb-3 border-bottom border-secondary">
+                    <h5 class="fw-bold">TradeNet</h5>
+                    <p class="small mb-0 text-white-50">Business Officer</p>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-controller="BusinessOfficer" asp-action="Dashboard">
+                            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="BusinessOfficer" asp-action="MyLicenses">
+                            <i class="fas fa-certificate me-2"></i> My Licenses
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="BusinessOfficer" asp-action="ApplyLicense">
+                            <i class="fas fa-file-alt me-2"></i> Apply License
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="BusinessOfficer" asp-action="MySubsidies">
+                            <i class="fas fa-hand-holding-usd me-2"></i> My Subsidies
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="BusinessOfficer" asp-action="ApplySubsidy">
+                            <i class="fas fa-plus me-2"></i> Apply Subsidy
+                        </a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            <button type="submit" class="nav-link btn btn-link text-start w-100">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+
+            <main class="col-md-10 offset-md-2 px-4 py-4" style="margin-left: 16.666667%; width: 83.333333%; max-height: 100vh; overflow-y: auto;">
+                <div class="mb-4">
+                    <h2 class="fw-bold text-primary">Business Officer Dashboard</h2>
+                    <p class="text-muted mb-0">Manage your business licenses and subsidy applications</p>
+                </div>
+
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-start border-primary border-3 h-100">
+                            <div class="card-body bg-light p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1">My Licenses</p>
+                                        <h4 class="fw-bold text-primary mb-0">@totalLicenses</h4>
+                                    </div>
+                                    <div class="bg-primary bg-opacity-10 rounded p-2">
+                                        <i class="fas fa-certificate fa-lg text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-start border-success border-3 h-100">
+                            <div class="card-body bg-light p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1">Active Licenses</p>
+                                        <h4 class="fw-bold text-success mb-0">@activeLicenses</h4>
+                                    </div>
+                                    <div class="bg-success bg-opacity-10 rounded p-2">
+                                        <i class="fas fa-check-circle fa-lg text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-start border-warning border-3 h-100">
+                            <div class="card-body bg-light p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1">Pending Subsidies</p>
+                                        <h4 class="fw-bold text-warning mb-0">@pendingSubsidies</h4>
+                                    </div>
+                                    <div class="bg-warning bg-opacity-10 rounded p-2">
+                                        <i class="fas fa-clock fa-lg text-warning"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-primary mb-3">
+                                    <i class="fas fa-file-alt me-2"></i> Apply for License
+                                </h5>
+                                <p class="card-text text-muted">Submit new license application (Export/Import/Local)</p>
+                                <a asp-action="ApplyLicense" class="btn btn-primary">Apply Now <i class="fas fa-arrow-right ms-2"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-success mb-3">
+                                    <i class="fas fa-hand-holding-usd me-2"></i> Apply for Subsidy
+                                </h5>
+                                <p class="card-text text-muted">Submit subsidy application for government programs</p>
+                                <a asp-action="ApplySubsidy" class="btn btn-success">Apply Now <i class="fas fa-arrow-right ms-2"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

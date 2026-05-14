@@ -1,4 +1,4 @@
-namespace Goverment.Models
+namespace Government.API.Models
 {
     public class TradeProgram
     {
@@ -13,3 +13,4 @@ namespace Goverment.Models
         public ICollection<Resource> Resources { get; set; } = new List<Resource>();
     }
 }
+

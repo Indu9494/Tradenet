@@ -1,5 +1,5 @@
-using Goverment.Interfaces;
-using Goverment.Models;
+using Government.API.Interfaces;
+using Government.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,3 +70,4 @@ namespace Government.API.Controllers
         }
     }
 }
+

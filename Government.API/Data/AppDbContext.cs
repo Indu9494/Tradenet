@@ -1,4 +1,4 @@
-using Goverment.Models;
+using Government.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Government.API.Data

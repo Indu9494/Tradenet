@@ -1,0 +1,824 @@
+:root {
+    --tn-blue: #003566;
+    --tn-dark: #001d3d;
+    --tn-light: #f8f9fa;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+/* Prevent inner scrollbars - only outer scrollbar on main content */
+.table-responsive {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+}
+
+.card-body {
+    overflow: visible !important;
+}
+
+.bg-tn-blue {
+    background-color: var(--tn-blue);
+}
+
+.text-tn-blue {
+    color: var(--tn-blue);
+}
+
+/* ==========================================
+   NAVBAR - Pure CSS
+   ========================================== */
+.navbar {
+    transition: all 0.4s ease-in-out;
+}
+
+.navbar:not(.navbar-scrolled) {
+    background-color: transparent !important;
+}
+
+.navbar:not(.navbar-scrolled) .nav-link,
+.navbar:not(.navbar-scrolled) .navbar-brand {
+    color: white !important;
+}
+
+.navbar:not(.navbar-scrolled) .nav-logo {
+    filter: brightness(0) invert(1);
+}
+
+.navbar.navbar-scrolled {
+    background-color: white !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar.navbar-scrolled .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 53, 102, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.btn-login-toggle {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.navbar.navbar-scrolled .btn-login-toggle {
+    border-color: var(--tn-blue);
+    color: var(--tn-blue);
+}
+
+.btn-login-toggle:hover {
+    background-color: white;
+    color: var(--tn-blue);
+}
+
+/* ==========================================
+   HERO SECTION
+   ========================================== */
+.hero-section {
+    background: linear-gradient(rgba(0, 53, 102, 0.85), rgba(0, 53, 102, 0.85)),
+        url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    padding: 160px 0 120px;
+}
+
+/* ==========================================
+   SERVICES SECTION - Pure CSS Hover Effects
+   ========================================== */
+#services {
+    background-color: #f0f4f8;
+}
+
+.service-card {
+    min-height: 440px;
+    max-width: 340px;
+    margin: 0 auto;
+    border-radius: 18px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 3rem 2rem !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: none;
+    text-align: center;
+}
+
+.icon-box {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    transition: all 0.4s ease;
+    flex-shrink: 0;
+}
+
+.icon-box i {
+    font-size: 2.2rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.service-card h5 {
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+    font-weight: 700;
+}
+
+.service-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.card-blue {
+    background-color: var(--tn-blue) !important;
+    color: white !important;
+}
+
+.card-blue .icon-box {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.card-blue i {
+    color: #ffffff !important;
+}
+
+.card-blue p {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.card-white {
+    background-color: #ffffff !important;
+    color: var(--tn-dark) !important;
+}
+
+.card-white .icon-box {
+    background: rgba(0, 53, 102, 0.05);
+}
+
+.card-white i {
+    color: var(--tn-blue) !important;
+}
+
+.card-white p {
+    color: #6c757d !important;
+}
+
+/* Pure CSS Hover Effects */
+.service-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 53, 102, 0.15) !important;
+}
+
+.service-card:hover .icon-box i {
+    transform: rotate(15deg) scale(1.1);
+}
+
+.service-row {
+    row-gap: 1.5rem;
+    column-gap: 0rem;
+}
+
+/* ==========================================
+   FORMS - Pure CSS Validation States
+   ========================================== */
+.form-control:focus {
+    border-color: var(--tn-blue);
+    box-shadow: 0 0 0 0.2rem rgba(0, 53, 102, 0.25);
+}
+
+.form-control:valid {
+    border-color: #28a745;
+}
+
+.form-control:invalid:not(:placeholder-shown) {
+    border-color: #dc3545;
+}
+
+/* Required field indicator */
+.form-label.required::after {
+    content: " *";
+    color: #dc3545;
+}
+
+/* ==========================================
+   TABLES - Pure CSS Hover & Stripe Effects
+   ========================================== */
+.table-hover tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 53, 102, 0.05);
+    cursor: pointer;
+    transform: scale(1.01);
+}
+
+/* Row highlight on focus (using :focus-within) */
+.table tbody tr:focus-within {
+    background-color: rgba(0, 53, 102, 0.1);
+    outline: 2px solid var(--tn-blue);
+}
+
+/* Sortable column indicator */
+th[data-sortable] {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 2rem !important;
+}
+
+th[data-sortable]:hover {
+    background-color: rgba(0, 53, 102, 0.05);
+}
+
+th[data-sortable]::after {
+    content: "⇅";
+    position: absolute;
+    right: 0.5rem;
+    opacity: 0.3;
+}
+
+th[data-sortable]:hover::after {
+    opacity: 0.7;
+}
+
+/* ==========================================
+   CARDS & STAT CARDS - Pure CSS Animation
+   ========================================== */
+.stat-card {
+    border-radius: 15px;
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+/* ==========================================
+   BADGES - Auto Status Colors (Pure CSS)
+   ========================================== */
+.badge[data-status="Active"],
+.badge[data-status="Completed"],
+.badge[data-status="Compliant"] {
+    background-color: #28a745 !important;
+}
+
+.badge[data-status="Inactive"],
+.badge[data-status="Failed"],
+.badge[data-status="Non-Compliant"] {
+    background-color: #dc3545 !important;
+}
+
+.badge[data-status="Pending"],
+.badge[data-status="Expiring"] {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+/* ==========================================
+   BUTTONS - Enhanced Hover States
+   ========================================== */
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background-color: var(--tn-blue);
+    border-color: var(--tn-blue);
+}
+
+.btn-primary:hover {
+    background-color: var(--tn-dark);
+    border-color: var(--tn-dark);
+}
+
+/* ==========================================
+   ALERTS - Auto Fade Animation
+   ========================================== */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.alert {
+    animation: slideInRight 0.5s ease-out;
+}
+
+.alert.fade {
+    animation: fadeOut 0.5s ease-out;
+}
+
+/* ==========================================
+   LOADING STATES - Pure CSS Spinner
+   ========================================== */
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.btn-loading::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1rem;
+    height: 1rem;
+    margin-top: -0.5rem;
+    margin-left: -0.5rem;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner 0.75s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==========================================
+   TOOLTIPS - Pure CSS (using title attribute)
+   ========================================== */
+[data-tooltip] {
+    position: relative;
+    cursor: help;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    font-size: 0.875rem;
+    z-index: 1000;
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+}
+
+/* ==========================================
+   ACCORDION - Enhanced Bootstrap Accordion
+   ========================================== */
+.accordion-button:not(.collapsed) {
+    background-color: var(--tn-blue);
+    color: white;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 53, 102, 0.25);
+}
+
+/* ==========================================
+   DROPDOWN - Enhanced Hover States
+   ========================================== */
+.dropdown-item:hover {
+    background-color: var(--tn-blue);
+    color: white;
+}
+
+/* ==========================================
+   PAGINATION - Enhanced Design
+   ========================================== */
+.page-link {
+    color: var(--tn-blue);
+}
+
+.page-link:hover {
+    color: var(--tn-dark);
+    background-color: rgba(0, 53, 102, 0.1);
+}
+
+.page-item.active .page-link {
+    background-color: var(--tn-blue);
+    border-color: var(--tn-blue);
+}
+
+/* ==========================================
+   TABS - Enhanced Navigation Tabs
+   ========================================== */
+.nav-tabs .nav-link {
+    color: var(--tn-blue);
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: var(--tn-blue);
+}
+
+.nav-tabs .nav-link.active {
+    background-color: var(--tn-blue);
+    color: white;
+    border-color: var(--tn-blue);
+}
+
+/* ==========================================
+   PROGRESS BARS - Animated
+   ========================================== */
+@keyframes progressAnimation {
+    0% {
+        width: 0;
+    }
+}
+
+.progress-bar {
+    animation: progressAnimation 1.5s ease-out;
+}
+
+/* ==========================================
+   LOGIN/REGISTER PAGES - Pure CSS
+   ========================================== */
+.login-container,
+.register-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    background-color: var(--tn-light);
+}
+
+.login-card {
+    max-width: 500px;
+    width: 100%;
+}
+
+.register-card {
+    max-width: 700px;
+    width: 100%;
+}
+
+/* ==========================================
+   SIDEBAR - Dashboard Sidebar
+   ========================================== */
+.sidebar {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #003566 0%, #001d3d 100%);
+    color: white;
+}
+
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    transition: all 0.3s;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* ==========================================
+   SEARCH BOX - Investigation Hub
+   ========================================== */
+.search-box {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 30px;
+}
+
+/* ==========================================
+   MODAL - Enhanced Bootstrap Modal
+   ========================================== */
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+/* ==========================================
+   FADE IN ANIMATIONS - Pure CSS
+   ========================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ==========================================
+   UTILITY CLASSES
+   ========================================== */
+.fw-600 {
+    font-weight: 600;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+/* ==========================================
+   PRINT STYLES - Hide unnecessary elements
+   ========================================== */
+@media print {
+    .sidebar,
+    .navbar,
+    .btn,
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        font-size: 12pt;
+    }
+
+    .table {
+        border: 1px solid #ddd;
+    }
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN - Mobile First
+   ========================================== */
+@media (max-width: 768px) {
+    .service-card {
+        min-height: 350px;
+        padding: 2rem 1.5rem !important;
+    }
+
+    .hero-section {
+        padding: 100px 0 80px;
+    }
+
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* ==========================================
+   ACCESSIBILITY - Focus Indicators
+   ========================================== */
+*:focus {
+    outline: 2px solid var(--tn-blue);
+    outline-offset: 2px;
+}
+
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(0, 53, 102, 0.25);
+}
+
+/* ==========================================
+   DARK MODE SUPPORT (Optional)
+   ========================================== */
+@media (prefers-color-scheme: dark) {
+    /* Uncomment to enable dark mode */
+    /* body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+
+    .card {
+        background-color: #2a2a2a;
+        color: #e0e0e0;
+    } */
+}
+
+/* ==========================================
+   CUSTOM SCROLLBAR
+   ========================================== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--tn-blue);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--tn-dark);
+}
+
+.btn-login-toggle {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.navbar.navbar-scrolled .btn-login-toggle {
+    border-color: var(--tn-blue);
+    color: var(--tn-blue);
+}
+
+.btn-login-toggle:hover {
+    background-color: white;
+    color: var(--tn-blue);
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    background: linear-gradient(rgba(0, 53, 102, 0.85), rgba(0, 53, 102, 0.85)),
+        url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    padding: 160px 0 120px;
+}
+
+/* --- Services Section --- */
+#services {
+    background-color: #f0f4f8;
+}
+
+.service-card {
+    min-height: 440px;
+    max-width: 340px;
+    margin: 0 auto;
+    border-radius: 18px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 3rem 2rem !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: none;
+    text-align: center;
+}
+
+.icon-box {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    transition: all 0.4s ease;
+    flex-shrink: 0;
+}
+
+.icon-box i {
+    font-size: 2.2rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    display: block;
+}
+
+.service-card h5 {
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+    font-weight: 700;
+}
+
+.service-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.card-blue {
+    background-color: var(--tn-blue) !important;
+    color: white !important;
+}
+
+.card-blue .icon-box {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.card-blue i {
+    color: #ffffff !important;
+}
+
+.card-blue p {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.card-white {
+    background-color: #ffffff !important;
+    color: var(--tn-dark) !important;
+}
+
+.card-white .icon-box {
+    background: rgba(0, 53, 102, 0.05);
+}
+
+.card-white i {
+    color: var(--tn-blue) !important;
+}
+
+.card-white p {
+    color: #6c757d !important;
+}
+
+.service-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 53, 102, 0.15) !important;
+}
+
+.service-card:hover .icon-box i {
+    transform: rotate(15deg) scale(1.1);
+}
+
+.service-row {
+    row-gap: 1.5rem;
+    column-gap: 0rem;
+}
+
+/* Login/Register Pages */
+.login-container,
+.register-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    background-color: var(--tn-light);
+}
+
+.login-card {
+    max-width: 500px;
+    width: 100%;
+}
+
+.register-card {
+    max-width: 700px;
+    width: 100%;
+}
+
+.modal-backdrop.show {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.fw-600 {
+    font-weight: 600;
+}

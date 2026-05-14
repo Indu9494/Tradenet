@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Goverment.Models.TradeLicense>
+
+@{
+    ViewData["Title"] = "Trade Licenses";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-file-earmark-check"></i> Trade Licenses</h2>
+    <div>
+        <a asp-controller="AuditorDashboard" asp-action="InvestigationHub" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Issue New License
+        </a>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="btn-group" role="group">
+            <a asp-action="Index" class="btn btn-outline-primary">All Licenses</a>
+            <a asp-action="ByType" asp-route-type="Export" class="btn btn-outline-primary">Export</a>
+            <a asp-action="ByType" asp-route-type="Import" class="btn btn-outline-primary">Import</a>
+        </div>
+        <div class="btn-group ms-2" role="group">
+            <a asp-action="ByStatus" asp-route-status="Active" class="btn btn-outline-success">Active</a>
+            <a asp-action="ByStatus" asp-route-status="Expired" class="btn btn-outline-danger">Expired</a>
+            <a asp-action="ByStatus" asp-route-status="Pending" class="btn btn-outline-warning">Pending</a>
+        </div>
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>License ID</th>
+                    <th>Business Entity</th>
+                    <th>License Type</th>
+                    <th>Issue Date</th>
+                    <th>Expiry Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><strong>@item.LicenseID</strong></td>
+                        <td>@item.Business?.Name</td>
+                        <td>
+                            <span class="badge border text-dark">@item.Type</span>
+                        </td>
+                        <td>@item.IssuedDate.ToShortDateString()</td>
+                        <td>@item.ExpiryDate.ToShortDateString()</td>
+                        <td>
+                            <span class="badge bg-@(item.Status == "Active" ? "success" : (item.Status == "Expired" ? "danger" : "warning text-dark"))">
+                                @item.Status
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert alert-info mt-3">
+        <i class="bi bi-info-circle"></i> Total Licenses Managed: <strong>@Model.Count()</strong>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> No trade licenses found.
+    </div>
+}

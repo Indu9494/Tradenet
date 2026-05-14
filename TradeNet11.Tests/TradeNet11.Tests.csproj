@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TradeNet11\TradeNet11.csproj" />
+	  <ProjectReference Include="..\TradeNet11.API\TradeNet11.API.csproj" />
   </ItemGroup>
 
 </Project>

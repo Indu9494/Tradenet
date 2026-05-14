@@ -1,0 +1,43 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "..\\Tradenet_ProgramManager_2.API\\Tradenet_ProgramManager.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\Tradenet_ProgramManager_2.API.Tests\\Tradenet_ProgramManager_2.API.Tests.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\TradeNet11.API\\TradeNet11.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\TradenetProject.Api\\TradenetProject.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\Government.API\\Government.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\titans_adminAPI\\titans_admin.API\\titans_admin.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\Goverment\\Government.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\TradeNet11.Tests\\TradeNet11.Tests.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\TradeNetAPI\\TradeNetAPI.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

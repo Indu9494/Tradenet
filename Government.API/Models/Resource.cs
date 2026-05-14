@@ -1,4 +1,4 @@
-namespace Goverment.Models
+namespace Government.API.Models
 {
     public class Resource
     {
@@ -11,3 +11,4 @@ namespace Goverment.Models
         public TradeProgram? TradeProgram { get; set; }
     }
 }
+

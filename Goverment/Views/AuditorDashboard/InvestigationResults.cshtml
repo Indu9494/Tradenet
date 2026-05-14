@@ -1,0 +1,639 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Investigation Results";
+    var searchType = ViewBag.SearchType as string;
+    var searchValue = ViewBag.SearchValue as string;
+    var notFound = ViewBag.NotFound as string;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="~/css/tradenet.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #003566 0%, #001d3d 100%);
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-light" style="overflow-x: hidden;">
+
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-md-block sidebar p-3 position-fixed" style="height: 100vh; left: 0; top: 0; z-index: 100; overflow-y: hidden;">
+                <div class="text-center mb-3 pb-2 border-bottom border-secondary">
+                    <h5 class="fw-bold">TradeNet</h5>
+                    <p class="small mb-0 text-white-50">Government Auditor</p>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="AuditorDashboard" asp-action="Index">
+                            <i class="fas fa-chart-line me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-controller="AuditorDashboard" asp-action="InvestigationHub">
+                            <i class="fas fa-search me-2"></i> Investigation Hub
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="AuditorDashboard" asp-action="ComplianceReview">
+                            <i class="fas fa-clipboard-check me-2"></i> Compliance Review
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="AuditorDashboard" asp-action="SubsidyTracking">
+                            <i class="fas fa-money-bill-wave me-2"></i> Subsidy Tracking
+                        </a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            <button type="submit" class="nav-link btn btn-link text-start w-100">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-10 offset-md-2 px-4 py-3" style="margin-left: 16.666667%; width: 83.333333%; max-height: 100vh; overflow-y: auto;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h2 class="fw-bold text-primary">Investigation Results</h2>
+                        <p class="text-muted mb-0">Search results for @searchType: <strong>@searchValue</strong></p>
+                    </div>
+                    <div>
+                        <a asp-controller="AuditorDashboard" asp-action="InvestigationHub" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Back to Search
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Debug Info (Remove after testing) -->
+                <div class="alert alert-info mb-3">
+                    <strong>Debug Info:</strong><br/>
+                    Search Type: @searchType<br/>
+                    Search Value: @searchValue<br/>
+                    Not Found: @(notFound ?? "null")<br/>
+                    Business: @(ViewBag.Business != null ? "Found" : "null")<br/>
+                    License: @(ViewBag.License != null ? "Found" : "null")<br/>
+                    Transaction: @(ViewBag.Transaction != null ? "Found" : "null")
+                </div>
+
+                @if (!string.IsNullOrEmpty(notFound))
+                {
+                    <!-- Not Found Alert -->
+                    <div class="alert alert-warning shadow-sm">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Not Found:</strong> @notFound
+                    </div>
+                }
+                else if (searchType == "BusinessID")
+                {
+                    var business = ViewBag.Business as Goverment.Models.Business;
+                    var transactions = ViewBag.Transactions as IEnumerable<Goverment.Models.Transaction>;
+                    var licenses = ViewBag.Licenses as IEnumerable<Goverment.Models.TradeLicense>;
+                    var audits = ViewBag.Audits as IEnumerable<Goverment.Models.Audit>;
+
+                    @if (business != null)
+                    {
+                        <!-- Business Summary Card -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-building me-2"></i> Business Details
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th width="20%" class="bg-light">ID</th>
+                                                <td><span class="badge bg-secondary">#@business.BusinessID</span></td>
+                                                <th width="20%" class="bg-light">Status</th>
+                                                <td>
+                                                    @if (business.Status == "Active")
+                                                    {
+                                                        <span class="badge bg-success">@business.Status</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-danger">@business.Status</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">Name</th>
+                                                <td colspan="3" class="fw-bold">@business.Name</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">Type</th>
+                                                <td><span class="badge bg-info">@business.Type</span></td>
+                                                <th class="bg-light">Contact</th>
+                                                <td>@business.ContactInfo</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">Address</th>
+                                                <td colspan="3">@business.Address</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trade Licenses -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fas fa-certificate me-2"></i> Trade Licenses (@(licenses?.Count() ?? 0))
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            @if (licenses != null && licenses.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>License ID</th>
+                                                <th>Type</th>
+                                                <th>Issued Date</th>
+                                                <th>Expiry Date</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var license in licenses)
+                                            {
+                                                <tr>
+                                                    <td><span class="badge bg-secondary">#@license.LicenseID</span></td>
+                                                    <td>@license.Type</td>
+                                                    <td>@license.IssuedDate.ToString("MMM dd, yyyy")</td>
+                                                    <td>@license.ExpiryDate.ToString("MMM dd, yyyy")</td>
+                                                    <td>
+                                                        @if (license.Status == "Active")
+                                                        {
+                                                            <span class="badge bg-success">@license.Status</span>
+                                                        }
+                                                        else if (license.Status == "Expired")
+                                                        {
+                                                            <span class="badge bg-danger">@license.Status</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-warning text-dark">@license.Status</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">No licenses found for this business.</p>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Transactions -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fas fa-exchange-alt me-2"></i> Transactions (@(transactions?.Count() ?? 0))
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            @if (transactions != null && transactions.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Transaction ID</th>
+                                                <th>Type</th>
+                                                <th>Amount</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var transaction in transactions)
+                                            {
+                                                <tr>
+                                                    <td><span class="badge bg-secondary">#@transaction.TransactionID</span></td>
+                                                    <td><span class="badge bg-info">@transaction.Type</span></td>
+                                                    <td class="fw-bold text-success">@transaction.Amount.ToString("C")</td>
+                                                    <td>@transaction.Date.ToString("MMM dd, yyyy")</td>
+                                                    <td>
+                                                        @if (transaction.Status == "Completed")
+                                                        {
+                                                            <span class="badge bg-success">@transaction.Status</span>
+                                                        }
+                                                        else if (transaction.Status == "Pending")
+                                                        {
+                                                            <span class="badge bg-warning text-dark">@transaction.Status</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-danger">@transaction.Status</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">No transactions found for this business.</p>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Audit Logs -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fas fa-clipboard-list me-2"></i> Audit Logs (@(audits?.Count() ?? 0))
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            @if (audits != null && audits.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Audit ID</th>
+                                                <th>Scope</th>
+                                                <th>Findings</th>
+                                                <th>Officer ID</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var audit in audits)
+                                            {
+                                                <tr>
+                                                    <td><span class="badge bg-secondary">#@audit.AuditID</span></td>
+                                                    <td>@audit.Scope</td>
+                                                    <td><small>@audit.Findings</small></td>
+                                                    <td>@audit.OfficerID</td>
+                                                    <td>@audit.Date.ToString("MMM dd, yyyy")</td>
+                                                    <td><span class="badge bg-primary">@audit.Status</span></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">No audit logs found.</p>
+                            }
+                        </div>
+                    </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning shadow-sm">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>No Data:</strong> Business information could not be loaded.
+                        </div>
+                    }
+                }
+                else if (searchType == "LicenseID")
+                {
+                    var license = ViewBag.License as Goverment.Models.TradeLicense;
+                    var business = ViewBag.Business as Goverment.Models.Business;
+                    var audits = ViewBag.Audits as IEnumerable<Goverment.Models.Audit>;
+
+                    @if (license != null)
+                    {
+                        <!-- License Summary Card -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-certificate me-2"></i> License Details
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th width="20%" class="bg-light">License ID</th>
+                                            <td><span class="badge bg-secondary">#@license.LicenseID</span></td>
+                                            <th width="20%" class="bg-light">Status</th>
+                                            <td>
+                                                @if (license.Status == "Active")
+                                                {
+                                                    <span class="badge bg-success">@license.Status</span>
+                                                }
+                                                else if (license.Status == "Expired")
+                                                {
+                                                    <span class="badge bg-danger">@license.Status</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning text-dark">@license.Status</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">License Type</th>
+                                            <td>@license.Type</td>
+                                            <th class="bg-light">Business ID</th>
+                                            <td><span class="badge bg-secondary">#@license.BusinessID</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">Issued Date</th>
+                                            <td>@license.IssuedDate.ToString("MMM dd, yyyy")</td>
+                                            <th class="bg-light">Expiry Date</th>
+                                            <td>@license.ExpiryDate.ToString("MMM dd, yyyy")</td>
+                                        </tr>
+                                        @if (business != null)
+                                        {
+                                            <tr>
+                                                <th class="bg-light">Business Name</th>
+                                                <td colspan="3" class="fw-bold">@business.Name</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (business != null)
+                    {
+                        <!-- Associated Business -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-building me-2"></i> Associated Business
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th width="20%" class="bg-light">Business ID</th>
+                                                <td><span class="badge bg-secondary">#@business.BusinessID</span></td>
+                                                <th width="20%" class="bg-light">Status</th>
+                                                <td>
+                                                    @if (business.Status == "Active")
+                                                    {
+                                                        <span class="badge bg-success">@business.Status</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-danger">@business.Status</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">Name</th>
+                                                <td colspan="3" class="fw-bold">@business.Name</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">Type</th>
+                                                <td><span class="badge bg-info">@business.Type</span></td>
+                                                <th class="bg-light">Contact</th>
+                                                <td>@business.ContactInfo</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-light">Address</th>
+                                                <td colspan="3">@business.Address</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Audit Logs -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fas fa-clipboard-list me-2"></i> Audit Logs (@(audits?.Count() ?? 0))
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            @if (audits != null && audits.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Audit ID</th>
+                                                <th>Scope</th>
+                                                <th>Findings</th>
+                                                <th>Officer ID</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var audit in audits)
+                                            {
+                                                <tr>
+                                                    <td><span class="badge bg-secondary">#@audit.AuditID</span></td>
+                                                    <td>@audit.Scope</td>
+                                                    <td><small>@audit.Findings</small></td>
+                                                    <td>@audit.OfficerID</td>
+                                                    <td>@audit.Date.ToString("MMM dd, yyyy")</td>
+                                                    <td><span class="badge bg-primary">@audit.Status</span></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">No audit logs found.</p>
+                            }
+                        </div>
+                    </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning shadow-sm">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>No Data:</strong> License information could not be loaded.
+                        </div>
+                    }
+                }
+                else if (searchType == "TransactionID")
+                {
+                    var transaction = ViewBag.Transaction as Goverment.Models.Transaction;
+                    var business = ViewBag.Business as Goverment.Models.Business;
+                    var audits = ViewBag.Audits as IEnumerable<Goverment.Models.Audit>;
+
+                    @if (transaction != null)
+                    {
+                        <!-- Transaction Summary Card -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-exchange-alt me-2"></i> Transaction Details
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th width="20%" class="bg-light">Transaction ID</th>
+                                            <td><span class="badge bg-secondary">#@transaction.TransactionID</span></td>
+                                            <th width="20%" class="bg-light">Status</th>
+                                            <td>
+                                                @if (transaction.Status == "Completed")
+                                                {
+                                                    <span class="badge bg-success">@transaction.Status</span>
+                                                }
+                                                else if (transaction.Status == "Pending")
+                                                {
+                                                    <span class="badge bg-warning text-dark">@transaction.Status</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">@transaction.Status</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">Type</th>
+                                            <td><span class="badge bg-info">@transaction.Type</span></td>
+                                            <th class="bg-light">Amount</th>
+                                            <td class="fw-bold text-success">@transaction.Amount.ToString("C")</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-light">Date</th>
+                                            <td>@transaction.Date.ToString("MMM dd, yyyy")</td>
+                                            <th class="bg-light">Business ID</th>
+                                            <td><span class="badge bg-secondary">#@transaction.BusinessID</span></td>
+                                        </tr>
+                                        @if (business != null)
+                                        {
+                                            <tr>
+                                                <th class="bg-light">Business Name</th>
+                                                <td colspan="3" class="fw-bold">@business.Name</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (business != null)
+                    {
+                        <!-- Associated Business -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-building me-2"></i> Associated Business
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Name:</strong> @business.Name</p>
+                                <p><strong>Type:</strong> <span class="badge bg-info">@business.Type</span></p>
+                                <p><strong>Address:</strong> @business.Address</p>
+                                <p><strong>Contact:</strong> @business.ContactInfo</p>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Audit Logs -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fas fa-clipboard-list me-2"></i> Audit Logs (@(audits?.Count() ?? 0))
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            @if (audits != null && audits.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Audit ID</th>
+                                                <th>Scope</th>
+                                                <th>Findings</th>
+                                                <th>Officer ID</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var audit in audits)
+                                            {
+                                                <tr>
+                                                    <td><span class="badge bg-secondary">#@audit.AuditID</span></td>
+                                                    <td>@audit.Scope</td>
+                                                    <td><small>@audit.Findings</small></td>
+                                                    <td>@audit.OfficerID</td>
+                                                    <td>@audit.Date.ToString("MMM dd, yyyy")</td>
+                                                    <td><span class="badge bg-primary">@audit.Status</span></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">No audit logs found.</p>
+                            }
+                        </div>
+                    </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning shadow-sm">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>No Data:</strong> Transaction information could not be loaded.
+                        </div>
+                    }
+                }
+
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

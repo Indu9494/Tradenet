@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Goverment.Models.Report>
+
+@{
+    ViewData["Title"] = "System Reports";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-file-earmark-bar-graph"></i> Government Reports</h2>
+    <div>
+        <a asp-controller="AuditorDashboard" asp-action="InvestigationHub" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-arrow-left"></i> Back to Hub
+        </a>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Generate New Report
+        </a>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="btn-group" role="group">
+            <a asp-action="Index" class="btn btn-outline-primary">All Reports</a>
+            <a asp-action="ByScope" asp-route-scope="License" class="btn btn-outline-primary">Licenses</a>
+            <a asp-action="ByScope" asp-route-scope="Transaction" class="btn btn-outline-primary">Transactions</a>
+            <a asp-action="ByScope" asp-route-scope="Program" class="btn btn-outline-primary">Programs</a>
+        </div>
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Report ID</th>
+                    <th>Scope</th>
+                    <th>Generated Date</th>
+                    <th>Metrics Summary</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var report in Model)
+                {
+                    <tr>
+                        <td><span class="badge bg-secondary">#@report.ReportID</span></td>
+                        <td>
+                            <span class="badge bg-info text-dark text-uppercase">@report.Scope</span>
+                        </td>
+                        <td>@report.GeneratedDate.ToString("MMM dd, yyyy HH:mm")</td>
+                        <td>
+                            <div class="text-muted small">
+                                @report.Metrics
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert alert-info mt-3">
+        <i class="bi bi-info-circle"></i> Total Reports Generated: <strong>@Model.Count()</strong>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> No reports have been generated yet. 
+        <a asp-action="Create" class="alert-link">Generate the first report here.</a>
+    </div>
+}

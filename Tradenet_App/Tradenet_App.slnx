@@ -1,12 +1,11 @@
 <Solution>
-  <Project Path="../../Tradenet Portal/Goverment 4/Goverment/Goverment/Goverment.csproj" />
-  <Project Path="../../Tradenet Portal/Goverment 4/Goverment/Government.API.Tests/Government.API.Tests.csproj" />
-  <Project Path="../../Tradenet Portal/Goverment 4/Goverment/Government.API/Government.API.csproj" />
-  <Project Path="../../Tradenet Portal/Program Manager 1/TradenetPM-WebAPI/Tradenet_ProgramManager_2.API.Tests/Tradenet_ProgramManager_2.API.Tests.csproj" />
-  <Project Path="../../Tradenet Portal/Program Manager 1/TradenetPM-WebAPI/Tradenet_ProgramManager_2.API/Tradenet_ProgramManager.API.csproj" />
-  <Project Path="../../Tradenet Portal/Tradenet/Tradenet/titans_admin.API/titans_admin.API.csproj" />
-  <Project Path="../../Tradenet Portal/TradeNetFinal/TradeNetFinal/TradeNet11.API/TradeNet11.API.csproj" />
-  <Project Path="../../Tradenet Portal/TradeNetFinal/TradeNetFinal/TradeNet11.Tests/TradeNet11.Tests.csproj" />
-  <Project Path="../../Tradenet Portal/TradeNetPortal 2/TradeNetPortal/TradeNetAPI/TradeNetAPI.csproj" />
-  <Project Path="../../Tradenet Portal/TradenetProject.Api/TradenetProject.Api/TradenetProject.Api.csproj" />
+  <Project Path="../Goverment/Government.csproj" />
+  <Project Path="../Government.API/Government.API.csproj" />
+  <Project Path="../titans_adminAPI/titans_admin.API/titans_admin.API.csproj" />
+  <Project Path="../TradeNet11.API/TradeNet11.API.csproj" />
+  <Project Path="../TradeNet11.Tests/TradeNet11.Tests.csproj" />
+  <Project Path="../TradeNetAPI/TradeNetAPI.csproj" />
+  <Project Path="../TradenetProject.Api/TradenetProject.Api.csproj" />
+  <Project Path="../Tradenet_ProgramManager_2.API.Tests/Tradenet_ProgramManager_2.API.Tests.csproj" />
+  <Project Path="../Tradenet_ProgramManager_2.API/Tradenet_ProgramManager.API.csproj" />
 </Solution>

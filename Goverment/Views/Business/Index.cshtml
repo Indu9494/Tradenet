@@ -1,0 +1,92 @@
+@model IEnumerable<Business>
+
+@{
+    ViewData["Title"] = "Businesses";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-building"></i> Businesses</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Create New Business
+    </a>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="btn-group" role="group">
+            <a asp-action="Index" class="btn btn-outline-primary">All</a>
+            <a asp-action="ByType" asp-route-type="Trader" class="btn btn-outline-primary">Traders</a>
+            <a asp-action="ByType" asp-route-type="Exporter" class="btn btn-outline-primary">Exporters</a>
+            <a asp-action="ByType" asp-route-type="Importer" class="btn btn-outline-primary">Importers</a>
+        </div>
+        <div class="btn-group ms-2" role="group">
+            <a asp-action="ByStatus" asp-route-status="Active" class="btn btn-outline-success">Active</a>
+            <a asp-action="ByStatus" asp-route-status="Inactive" class="btn btn-outline-secondary">Inactive</a>
+        </div>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Address</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var business in Model)
+                {
+                    <tr>
+                        <td>@business.BusinessID</td>
+                        <td><strong>@business.Name</strong></td>
+                        <td>
+                            <span class="badge bg-info">@business.Type</span>
+                        </td>
+                        <td>@business.Address</td>
+                        <td>@business.ContactInfo</td>
+                        <td>
+                            <span class="badge bg-@(business.Status == "Active" ? "success" : "secondary")">
+                                @business.Status
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a asp-action="Details" asp-route-id="@business.BusinessID" 
+                                   class="btn btn-info text-white" title="View Details">
+                                    <i class="bi bi-eye me-1"></i> View
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@business.BusinessID" 
+                                   class="btn btn-warning" title="Edit">
+                                    <i class="bi bi-pencil me-1"></i> Edit
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@business.BusinessID" 
+                                   class="btn btn-danger" title="Delete">
+                                    <i class="bi bi-trash me-1"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="alert alert-info mt-3">
+        <i class="bi bi-info-circle"></i> Showing <strong>@Model.Count()</strong> business(es)
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> No businesses found. 
+        <a asp-action="Create" class="alert-link">Create the first one</a>
+    </div>
+}

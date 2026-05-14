@@ -1,6 +1,7 @@
 using TradeNetProject.Data;
 using TradeNetProject.Models;
 using TradeNetProject.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace TradeNetProject.Repositories
 {

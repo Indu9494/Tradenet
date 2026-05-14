@@ -1,4 +1,6 @@
-namespace Goverment.Models
+using Government.API.Models;
+
+namespace Government.API.Models
 {
     public class Audit
     {
@@ -12,3 +14,4 @@ namespace Goverment.Models
         public User? Officer { get; set; }
     }
 }
+

@@ -1,0 +1,81 @@
+@model Business
+
+@{
+    ViewData["Title"] = "Create Business";
+}
+
+<h2>Create New Business</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" placeholder="Enter business name" required />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Type" class="form-label"></label>
+                <select asp-for="Type" class="form-control" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="Trader">Trader</option>
+                    <option value="Exporter">Exporter</option>
+                    <option value="Importer">Importer</option>
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Address" class="form-label"></label>
+                <textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter full address" required></textarea>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ContactInfo" class="form-label"></label>
+                <input asp-for="ContactInfo" class="form-control" placeholder="Phone, email, etc." required />
+                <span asp-validation-for="ContactInfo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Status" class="form-label"></label>
+                <select asp-for="Status" class="form-control" required>
+                    <option value="">-- Select Status --</option>
+                    <option value="Active" selected>Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Pending">Pending</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Create Business
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <div class="alert alert-info">
+            <h5><i class="bi bi-info-circle"></i> Instructions</h5>
+            <ul>
+                <li>Fill in all required fields marked with *</li>
+                <li>Choose the correct business type</li>
+                <li>Provide complete contact information</li>
+                <li>New businesses default to "Active" status</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

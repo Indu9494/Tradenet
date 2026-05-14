@@ -1,4 +1,4 @@
-namespace Goverment.Models
+namespace Government.API.Models
 {
     public class Transaction
     {
@@ -12,3 +12,4 @@ namespace Goverment.Models
         public Business? Business { get; set; }
     }
 }
+

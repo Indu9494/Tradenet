@@ -1,4 +1,4 @@
-namespace Goverment.Models
+namespace Government.API.Models
 {
     public class Subsidy
     {
@@ -18,3 +18,4 @@ namespace Goverment.Models
         public virtual TradeProgram? TradeProgram { get; set; }
     }
 }
+

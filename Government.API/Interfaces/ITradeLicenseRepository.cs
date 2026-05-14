@@ -1,6 +1,6 @@
-using Goverment.Models;
+using Government.API.Models;
 
-namespace Goverment.Interfaces
+namespace Government.API.Interfaces
 {
     public interface ITradeLicenseRepository
     {
@@ -16,3 +16,4 @@ namespace Goverment.Interfaces
         Task DeleteTradeLicenseAsync(int licenseId);
     }
 }
+

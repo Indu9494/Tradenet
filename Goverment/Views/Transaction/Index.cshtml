@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Goverment.Models.Transaction>
+
+@{
+    ViewData["Title"] = "Transactions";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-cash-stack"></i> Transaction Ledger</h2>
+    <div>
+        <a asp-controller="AuditorDashboard" asp-action="InvestigationHub" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-arrow-left"></i> Back to Hub
+        </a>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Record Transaction
+        </a>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="btn-group" role="group">
+            <a asp-action="Index" class="btn btn-outline-primary">All</a>
+            <a asp-action="ByType" asp-route-type="Sale" class="btn btn-outline-primary">Sales</a>
+            <a asp-action="ByType" asp-route-type="Purchase" class="btn btn-outline-primary">Purchases</a>
+        </div>
+        <div class="btn-group ms-2" role="group">
+            <a asp-action="ByStatus" asp-route-status="Completed" class="btn btn-outline-success">Completed</a>
+            <a asp-action="ByStatus" asp-route-status="Pending" class="btn btn-outline-warning">Pending</a>
+        </div>
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Business</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><span class="badge bg-secondary">#@item.TransactionID</span></td>
+                        <td><strong>@item.Business?.Name</strong></td>
+                        <td>@item.Date.ToString("MMM dd, yyyy")</td>
+                        <td>
+                            <span class="badge bg-@(item.Type == "Sale" ? "success" : "info")">@item.Type</span>
+                        </td>
+                        <td class="fw-bold">@item.Amount.ToString("C")</td>
+                        <td>
+                            <span class="badge rounded-pill bg-@(item.Status == "Completed" ? "success" : "warning text-dark")">
+                                @item.Status
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="alert alert-info mt-3">
+        <i class="bi bi-info-circle"></i> Showing <strong>@Model.Count()</strong> transaction(s)
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> No transactions found.
+    </div>
+}

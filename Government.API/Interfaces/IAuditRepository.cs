@@ -1,6 +1,6 @@
-using Goverment.Models;
+using Government.API.Models;
 
-namespace Goverment.Interfaces
+namespace Government.API.Interfaces
 {
     public interface IAuditRepository
     {
@@ -15,3 +15,4 @@ namespace Goverment.Interfaces
         Task<bool> DeleteAuditAsync(int auditId);
     }
 }
+

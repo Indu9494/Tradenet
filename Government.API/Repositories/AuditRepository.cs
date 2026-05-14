@@ -1,9 +1,9 @@
 using Government.API.Data;
-using Goverment.Interfaces;
-using Goverment.Models;
+using Government.API.Interfaces;
+using Government.API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Goverment.Repositories
+namespace Government.API.Repositories
 {
     public class AuditRepository : IAuditRepository
     {
@@ -84,3 +84,4 @@ namespace Goverment.Repositories
         }
     }
 }
+

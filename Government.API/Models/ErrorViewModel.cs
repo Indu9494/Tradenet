@@ -1,4 +1,4 @@
-namespace Goverment.Models
+namespace Government.API.Models
 {
     public class ErrorViewModel
     {
@@ -7,3 +7,4 @@ namespace Goverment.Models
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
 }
+

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Tradenet_ProgramManager_2.API.Models;
+using Tradenet_ProgramManager_2.API.Models.Shared;
 
 namespace Tradenet_ProgramManager_2.API.Data
 {
@@ -12,6 +13,7 @@ namespace Tradenet_ProgramManager_2.API.Data
 
         public DbSet<TradeProgram> TradePrograms { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<EntityRelationship> EntityRelationships { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,3 +29,6 @@ namespace Tradenet_ProgramManager_2.API.Data
         }
     }
 }
+
+
+

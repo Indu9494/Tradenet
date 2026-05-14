@@ -1,0 +1,60 @@
+@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+
+<!-- Sidebar -->
+<nav class="col-md-2 d-md-block sidebar p-3 position-fixed" style="height: 100vh; left: 0; top: 0; z-index: 100;">
+    <div class="text-center mb-4 pb-3 border-bottom border-secondary">
+        <h5 class="fw-bold">TradeNet</h5>
+        <p class="small mb-0 text-white-50">Government Auditor</p>
+    </div>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link @(currentAction == "Index" ? "active" : "")" asp-controller="AuditorDashboard" asp-action="Index">
+                <i class="fas fa-chart-line me-2"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(currentAction == "InvestigationHub" ? "active" : "")" asp-controller="AuditorDashboard" asp-action="InvestigationHub">
+                <i class="fas fa-search me-2"></i> Investigation Hub
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(currentAction == "ComplianceReview" ? "active" : "")" asp-controller="AuditorDashboard" asp-action="ComplianceReview">
+                <i class="fas fa-clipboard-check me-2"></i> Compliance Review
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(currentAction == "SubsidyTracking" ? "active" : "")" asp-controller="AuditorDashboard" asp-action="SubsidyTracking">
+                <i class="fas fa-money-bill-wave me-2"></i> Subsidy Tracking
+            </a>
+        </li>
+        <li class="nav-item mt-4">
+            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                <button type="submit" class="nav-link btn btn-link text-start w-100">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </button>
+            </form>
+        </li>
+    </ul>
+</nav>
+
+<style>
+    .sidebar {
+        min-height: 100vh;
+        background: linear-gradient(180deg, #003566 0%, #001d3d 100%);
+        color: white;
+    }
+    .sidebar .nav-link {
+        color: rgba(255, 255, 255, 0.8);
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 5px;
+        transition: all 0.3s;
+    }
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+</style>

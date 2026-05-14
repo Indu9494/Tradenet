@@ -1,0 +1,399 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Subsidy Tracking";
+    var programs = ViewBag.Programs as IEnumerable<Goverment.Models.TradeProgram>;
+    var subsidies = ViewBag.Subsidies as IEnumerable<Goverment.Models.Subsidy>;
+
+    // Dummy data for programs
+    var dummyPrograms = new List<dynamic>
+    {
+        new { ProgramID = 1, Title = "Export Promotion Grant", Description = "Financial support for export businesses", StartDate = DateTime.Now.AddMonths(-6), EndDate = DateTime.Now.AddMonths(6), Budget = 500000m, Status = "Active" },
+        new { ProgramID = 2, Title = "SME Trade Support", Description = "Support for small and medium enterprises", StartDate = DateTime.Now.AddMonths(-3), EndDate = DateTime.Now.AddMonths(9), Budget = 750000m, Status = "Active" },
+        new { ProgramID = 3, Title = "Technology Import Fund", Description = "Support for technology imports", StartDate = DateTime.Now.AddMonths(-2), EndDate = DateTime.Now.AddMonths(10), Budget = 950000m, Status = "Active" },
+        new { ProgramID = 4, Title = "Agricultural Export Initiative", Description = "Promote agricultural exports", StartDate = DateTime.Now.AddMonths(-4), EndDate = DateTime.Now.AddMonths(8), Budget = 600000m, Status = "Active" }
+    };
+
+    // Dummy data for subsidies
+    var dummySubsidies = new List<dynamic>
+    {
+        new { SubsidyID = 1, BusinessName = "ABC Trading Co.", Program = "Export Promotion Grant", Type = "Grant", Amount = 50000m, ApplicationDate = DateTime.Now.AddDays(-15), Status = "Pending", Notes = "Export expansion to European markets" },
+        new { SubsidyID = 2, BusinessName = "XYZ Imports Ltd.", Program = "Technology Import Fund", Type = "Grant", Amount = 75000m, ApplicationDate = DateTime.Now.AddDays(-10), Status = "Approved", Notes = "Technology import for manufacturing" },
+        new { SubsidyID = 3, BusinessName = "Global Traders Inc.", Program = "SME Trade Support", Type = "Tax Relief", Amount = 30000m, ApplicationDate = DateTime.Now.AddDays(-30), Status = "Disbursed", Notes = "Tax relief for SME trader" },
+        new { SubsidyID = 4, BusinessName = "Fresh Food Exports", Program = "Agricultural Export Initiative", Type = "Grant", Amount = 45000m, ApplicationDate = DateTime.Now.AddDays(-25), Status = "Disbursed", Notes = "Agricultural export promotion" },
+        new { SubsidyID = 5, BusinessName = "Tech Import Solutions", Program = "Technology Import Fund", Type = "Loan", Amount = 85000m, ApplicationDate = DateTime.Now.AddDays(-8), Status = "Approved", Notes = "Technology equipment loan" },
+        new { SubsidyID = 6, BusinessName = "Local Market Supply", Program = "SME Trade Support", Type = "Loan", Amount = 35000m, ApplicationDate = DateTime.Now.AddDays(-5), Status = "Pending", Notes = "SME business expansion loan" },
+        new { SubsidyID = 7, BusinessName = "International Exports", Program = "Export Promotion Grant", Type = "Grant", Amount = 100000m, ApplicationDate = DateTime.Now.AddDays(-20), Status = "Rejected", Notes = "Business inactive - denied" }
+    };
+
+    // Use dummy data if database is empty (check for 0 or null)
+    var totalPrograms = (programs != null && programs.Any()) ? programs.Count() : dummyPrograms.Count;
+    var totalBudget = (programs != null && programs.Any()) ? programs.Sum(p => p.Budget) : dummyPrograms.Sum(p => (decimal)p.Budget);
+    var activePrograms = (programs != null && programs.Any()) ? programs.Count(p => p.Status == "Active") : dummyPrograms.Count(p => p.Status == "Active");
+
+    var totalSubsidies = (subsidies != null && subsidies.Any()) ? subsidies.Count() : dummySubsidies.Count;
+    var pendingSubsidies = (subsidies != null && subsidies.Any()) ? subsidies.Count(s => s.Status == "Pending") : dummySubsidies.Count(s => s.Status == "Pending");
+    var approvedSubsidies = (subsidies != null && subsidies.Any()) ? subsidies.Count(s => s.Status == "Approved") : dummySubsidies.Count(s => s.Status == "Approved");
+    var disbursedSubsidies = (subsidies != null && subsidies.Any()) ? subsidies.Count(s => s.Status == "Disbursed") : dummySubsidies.Count(s => s.Status == "Disbursed");
+    var totalDisbursed = (subsidies != null && subsidies.Any()) ? subsidies.Where(s => s.Status == "Disbursed").Sum(s => s.Amount) : dummySubsidies.Where(s => s.Status == "Disbursed").Sum(s => (decimal)s.Amount);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="~/css/tradenet.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #003566 0%, #001d3d 100%);
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-light" style="overflow-x: hidden;">
+
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-md-block sidebar p-3 position-fixed" style="height: 100vh; left: 0; top: 0; z-index: 100;">
+                <div class="text-center mb-4 pb-3 border-bottom border-secondary">
+                    <h5 class="fw-bold">TradeNet</h5>
+                    <p class="small mb-0 text-white-50">Government Auditor</p>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="AuditorDashboard" asp-action="Index">
+                            <i class="fas fa-chart-line me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="AuditorDashboard" asp-action="InvestigationHub">
+                            <i class="fas fa-search me-2"></i> Investigation Hub
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="AuditorDashboard" asp-action="ComplianceReview">
+                            <i class="fas fa-clipboard-check me-2"></i> Compliance Review
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-controller="AuditorDashboard" asp-action="SubsidyTracking">
+                            <i class="fas fa-money-bill-wave me-2"></i> Subsidy Tracking
+                        </a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            <button type="submit" class="nav-link btn btn-link text-start w-100">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-10 offset-md-2 px-4 py-4" style="margin-left: 16.666667%; width: 83.333333%; max-height: 100vh; overflow-y: auto;">
+                <div class="mb-4">
+                    <h2 class="fw-bold text-primary">Subsidy & Program Tracking</h2>
+                    <p class="text-muted mb-0">Monitor trade programs and subsidy utilization</p>
+                </div>
+
+                <!-- Program Stats -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-start border-primary border-3 h-100">
+                            <div class="card-body bg-light p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1">Total Programs</p>
+                                        <h4 class="fw-bold text-primary mb-0">@totalPrograms</h4>
+                                    </div>
+                                    <div class="bg-primary bg-opacity-10 rounded p-2">
+                                        <i class="fas fa-project-diagram fa-lg text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-start border-success border-3 h-100">
+                            <div class="card-body bg-light p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1">Total Budget</p>
+                                        <h4 class="fw-bold text-success mb-0">@totalBudget.ToString("C0")</h4>
+                                    </div>
+                                    <div class="bg-success bg-opacity-10 rounded p-2">
+                                        <i class="fas fa-dollar-sign fa-lg text-success"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-start border-info border-3 h-100">
+                            <div class="card-body bg-light p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1">Active Programs</p>
+                                        <h4 class="fw-bold text-info mb-0">@activePrograms</h4>
+                                    </div>
+                                    <div class="bg-info bg-opacity-10 rounded p-2">
+                                        <i class="fas fa-check-circle fa-lg text-info"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Programs Table -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list me-2"></i> Trade Programs Overview
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Budget</th>
+                                        <th>Period</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (programs != null && programs.Any())
+                                    {
+                                        @foreach (var program in programs)
+                                        {
+                                            <tr>
+                                                <td><span class="badge bg-secondary">#@program.ProgramID</span></td>
+                                                <td>
+                                                    <strong>@program.Title</strong><br />
+                                                    <small class="text-muted">@program.Description</small>
+                                                </td>
+                                                <td class="fw-bold text-success">@program.Budget.ToString("C0")</td>
+                                                <td>
+                                                    <small>
+                                                        @program.StartDate.ToString("MMM yyyy") - @program.EndDate.ToString("MMM yyyy")
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-success">@program.Status</span>
+                                                </td>
+                                                <td>
+                                                    <a asp-controller="TradeProgram" asp-action="Details" asp-route-id="@program.ProgramID" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @foreach (var program in dummyPrograms)
+                                        {
+                                            <tr>
+                                                <td><span class="badge bg-secondary">#@program.ProgramID</span></td>
+                                                <td>
+                                                    <strong>@program.Title</strong><br />
+                                                    <small class="text-muted">@program.Description</small>
+                                                </td>
+                                                <td class="fw-bold text-success">@program.Budget.ToString("C0")</td>
+                                                <td>
+                                                    <small>
+                                                        @program.StartDate.ToString("MMM yyyy") - @program.EndDate.ToString("MMM yyyy")
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-success">@program.Status</span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary" disabled>
+                                                        <i class="fas fa-eye"></i> Demo
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subsidies Section -->
+                <div id="subsidies-section" class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="fas fa-hand-holding-usd me-2"></i> All Subsidies
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Subsidy Stats -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-3">
+                                <div class="card shadow-sm border-start border-primary border-3">
+                                    <div class="card-body p-2">
+                                        <small class="text-muted">Total Subsidies</small>
+                                        <h5 class="mb-0 text-primary">@(subsidies?.Count() ?? dummySubsidies.Count)</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card shadow-sm border-start border-warning border-3">
+                                    <div class="card-body p-2">
+                                        <small class="text-muted">Pending</small>
+                                        <h5 class="mb-0 text-warning">@(subsidies?.Count(s => s.Status == "Pending") ?? dummySubsidies.Count(s => s.Status == "Pending"))</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card shadow-sm border-start border-success border-3">
+                                    <div class="card-body p-2">
+                                        <small class="text-muted">Approved</small>
+                                        <h5 class="mb-0 text-success">@(subsidies?.Count(s => s.Status == "Approved") ?? dummySubsidies.Count(s => s.Status == "Approved"))</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card shadow-sm border-start border-info border-3">
+                                    <div class="card-body p-2">
+                                        <small class="text-muted">Disbursed</small>
+                                        <h5 class="mb-0 text-info">@(subsidies?.Count(s => s.Status == "Disbursed") ?? dummySubsidies.Count(s => s.Status == "Disbursed"))</h5>
+                                        <small class="text-muted">@((subsidies?.Where(s => s.Status == "Disbursed").Sum(s => s.Amount) ?? dummySubsidies.Where(s => s.Status == "Disbursed").Sum(s => s.Amount)).ToString("C0"))</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Subsidies Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Business</th>
+                                        <th>Program</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Application Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (subsidies != null && subsidies.Any())
+                                    {
+                                        @foreach (var subsidy in subsidies)
+                                        {
+                                            <tr>
+                                                <td><span class="badge bg-secondary">#@subsidy.SubsidyID</span></td>
+                                                <td>
+                                                    <strong>@subsidy.Business?.Name</strong>
+                                                </td>
+                                                <td><small>@subsidy.TradeProgram?.Title</small></td>
+                                                <td><span class="badge bg-info">@subsidy.Type</span></td>
+                                                <td class="fw-bold text-success">@subsidy.Amount.ToString("C")</td>
+                                                <td><small>@subsidy.ApplicationDate.ToString("MMM dd, yyyy")</small></td>
+                                                <td>
+                                                    @if (subsidy.Status == "Pending")
+                                                    {
+                                                        <span class="badge bg-warning text-dark">@subsidy.Status</span>
+                                                    }
+                                                    else if (subsidy.Status == "Approved")
+                                                    {
+                                                        <span class="badge bg-success">@subsidy.Status</span>
+                                                    }
+                                                    else if (subsidy.Status == "Disbursed")
+                                                    {
+                                                        <span class="badge bg-primary">@subsidy.Status</span>
+                                                    }
+                                                    else if (subsidy.Status == "Rejected")
+                                                    {
+                                                        <span class="badge bg-danger">@subsidy.Status</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @foreach (var subsidy in dummySubsidies)
+                                        {
+                                            <tr>
+                                                <td><span class="badge bg-secondary">#@subsidy.SubsidyID</span></td>
+                                                <td>
+                                                    <strong>@subsidy.BusinessName</strong>
+                                                </td>
+                                                <td><small>@subsidy.Program</small></td>
+                                                <td><span class="badge bg-info">@subsidy.Type</span></td>
+                                                <td class="fw-bold text-success">@subsidy.Amount.ToString("C")</td>
+                                                <td><small>@subsidy.ApplicationDate.ToString("MMM dd, yyyy")</small></td>
+                                                <td>
+                                                    @if (subsidy.Status == "Pending")
+                                                    {
+                                                        <span class="badge bg-warning text-dark">@subsidy.Status</span>
+                                                    }
+                                                    else if (subsidy.Status == "Approved")
+                                                    {
+                                                        <span class="badge bg-success">@subsidy.Status</span>
+                                                    }
+                                                    else if (subsidy.Status == "Disbursed")
+                                                    {
+                                                        <span class="badge bg-primary">@subsidy.Status</span>
+                                                    }
+                                                    else if (subsidy.Status == "Rejected")
+                                                    {
+                                                        <span class="badge bg-danger">@subsidy.Status</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary" disabled title="@subsidy.Notes">
+                                                        <i class="fas fa-eye"></i> Demo
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
